@@ -4,6 +4,15 @@ import cors from 'cors';
 
 const app = express();
 
+const transporter = nodemailer.createTransport({
+    host:'smtp.medrepexpress.com',
+      port: 587,
+      auth: {
+        user:'sales@medrepexpress.com',
+        pass: 'mxCY55Fc'
+      }
+    });
+
 
 /* ==================================================================================================
 =========================================== Middleware ==============================================
@@ -13,17 +22,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-
-var transporter = nodemailer.createTransport({
-    host:'smtp.medrepexpress.com',
-      port: 587,
-      auth: {
-        user:'sales@medrepexpress.com',
-        pass: 'mxCY55Fc'
-      }
-    });
+// Configure headers and cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
 
 /* ==================================================================================================
@@ -223,7 +229,7 @@ app.post('/api/shopping-cart', async(req, res) => {
 ======================================= Server connection ===========================================
 ===================================================================================================*/
 
-const port = process.env.port || 8080;
+const port = process.env.port || 3001;
 app.listen(port, () => {
     console.log('Listenig on port: ' + port);
 });
