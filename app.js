@@ -1,18 +1,17 @@
-import express from 'express';
-import nodemailer from 'nodemailer';
-import cors from 'cors';
+import express from "express";
+import nodemailer from "nodemailer";
+import cors from "cors";
 
 const app = express();
 
-const transporter = nodemailer.createTransport({
-    host:'smtp.medrepexpress.com',
-      port: 587,
-      auth: {
-        user:'sales@medrepexpress.com',
-        pass: 'mxCY55Fc'
-      }
-    });
-
+const transporter = nodemailer.createTransport({
+  host: "smtp.medrepexpress.com",
+  port: 587,
+  auth: {
+    user: "sales@medrepexpress.com",
+    pass: "mxCY55Fc"
+  }
+});
 
 /* ==================================================================================================
 =========================================== Middleware ==============================================
@@ -24,23 +23,25 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configure headers and cors
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    next();
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+  next();
 });
-
 
 /* ==================================================================================================
 ============================================== Routes ===============================================
  ==================================================================================================*/
 
 // ----------------------------------------- CONTACT US ---------------------------------------------
-app.post('/api/contact-us', async(req, res) => {
-    console.log(req.body);
+app.post("/api/contact-us", async (req, res) => {
+  console.log(req.body);
 
-    var htmlMail = `
+  var htmlMail = `
         <h3>----- CONTACT US -----</h3>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
@@ -57,32 +58,31 @@ app.post('/api/contact-us', async(req, res) => {
         </h4>
          `;
 
-    var subject = 'CONTACT US | ' +  req.body.name;
+  var subject = "CONTACT US | " + req.body.name;
 
-    var mailOptions = {
-        from: req.body.email,
-        to: 'sales@medrepexpress.com',
-        subject: subject,
-        html: htmlMail
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-            res.send(error);
-        }
-        else {
-            console.log('Email sent');
-            res.send('Email sent');
-        }
-    });
+  var mailOptions = {
+    from: req.body.email,
+    to: "sitioweb@indecmexico.com",
+    subject: subject,
+    html: htmlMail
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
+      console.log("Email sent");
+      res.send("Email sent");
+    }
+  });
 });
 
 // -------------------------------------- REQUEST SAMPLES -------------------------------------------
-app.post('/api/req-samples', async(req, res) => {
-    console.log(req.body);
+app.post("/api/req-samples", async (req, res) => {
+  console.log(req.body);
 
-    var htmlMail = `
+  var htmlMail = `
         <h3>----- REQUEST SAMPLES -----</h3>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
@@ -99,32 +99,32 @@ app.post('/api/req-samples', async(req, res) => {
         </h4>
     `;
 
-    var subject = 'REQUEST SAMPLES | ' +  req.body.businessName + ' | ' + req.body.name;
+  var subject =
+    "REQUEST SAMPLES | " + req.body.businessName + " | " + req.body.name;
 
-    var mailOptions = {
-        from: req.body.email,
-        to: 'sales@medrepexpress.com',
-        subject: subject,
-        html: htmlMail
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-            res.send(error);
-        }
-        else {
-            console.log('Email sent');
-            res.send('Email sent');
-        }
-    });
+  var mailOptions = {
+    from: req.body.email,
+    to: "sitioweb@indecmexico.com",
+    subject: subject,
+    html: htmlMail
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
+      console.log("Email sent");
+      res.send("Email sent");
+    }
+  });
 });
 
 // ------------------------------------ REQUEST PRODUCT INFO ----------------------------------------
-app.post('/api/req-product-info', async(req, res) => {
-    console.log(req.body);
+app.post("/api/req-product-info", async (req, res) => {
+  console.log(req.body);
 
-    var htmlMail = `
+  var htmlMail = `
         <h3>----- REQUEST PRODUCT INFO -----</h3>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
@@ -141,42 +141,48 @@ app.post('/api/req-product-info', async(req, res) => {
         </h4>
     `;
 
-    var subject = 'REQUEST PRODUCT INFO | ' +  req.body.businessName + ' | ' + req.body.name;
+  var subject =
+    "REQUEST PRODUCT INFO | " + req.body.businessName + " | " + req.body.name;
 
-    var mailOptions = {
-        from: req.body.email,
-        to: 'sales@medrepexpress.com',
-        subject: subject,
-        html: htmlMail
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-            res.send(error);
-        }
-        else {
-            console.log('Email sent');
-            res.send('Email sent');
-        }
-    });
+  var mailOptions = {
+    from: req.body.email,
+    to: "sitioweb@indecmexico.com",
+    subject: subject,
+    html: htmlMail
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
+      console.log("Email sent");
+      res.send("Email sent");
+    }
+  });
 });
 
 // --------------------------------------- SHOPPING CART --------------------------------------------
-app.post('/api/shopping-cart', async(req, res) => {
-    var purchaseOrder = '';
-    var i = "1";
-    for (var key in req.body.items) {
-        if (req.body.items.hasOwnProperty(key)) {
-            purchaseOrder += "Product " + i + 
-                        " => Description: " + req.body.items[key].description + 
-                        " | Code: " + req.body.items[key].code + 
-                        " | Quantity of product: " + req.body.items[key].cant + "<p>";    
-            i++;                  
-        }
+app.post("/api/shopping-cart", async (req, res) => {
+  var purchaseOrder = "";
+  var i = "1";
+  for (var key in req.body.items) {
+    if (req.body.items.hasOwnProperty(key)) {
+      purchaseOrder +=
+        "Product " +
+        i +
+        " => Description: " +
+        req.body.items[key].description +
+        " | Code: " +
+        req.body.items[key].code +
+        " | Quantity of product: " +
+        req.body.items[key].cant +
+        "<p>";
+      i++;
     }
+  }
 
-    var htmlMail = `
+  var htmlMail = `
         <h3>----- PURCHASE ORDER -----</h3>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
@@ -205,33 +211,34 @@ app.post('/api/shopping-cart', async(req, res) => {
         </h4>
     `;
 
-    var subject = 'PURCHASE ORDER | ' +  req.body.businessName + ' | ' + req.body.firstName;
+  var subject =
+    "PURCHASE ORDER | " + req.body.businessName + " | " + req.body.firstName;
 
-    var mailOptions = {
-        from: req.body.email,
-        to: 'sales@medrepexpress.com',
-        subject: subject,
-        html: htmlMail
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-            res.send(error);
-        }
-        else {
-            console.log('Email sent');
-        }
-    });
+  var mailOptions = {
+    from: req.body.email,
+    to: "sitioweb@indecmexico.com",
+    subject: subject,
+    html: htmlMail
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
+      console.log("Email sent");
+      res.send("Email sent");
+    }
+  });
 });
 
 /* ==================================================================================================
 ======================================= Server connection ===========================================
 ===================================================================================================*/
 
-const port = process.env.port || 3001;
-app.listen(port, () => {
-    console.log('Listenig on port: ' + port);
+const port = process.env.port || 3001;
+app.listen(port, () => {
+  console.log("Listenig on port: " + port);
 });
 
 /* EXECUTION COMMAND
