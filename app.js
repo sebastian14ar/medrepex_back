@@ -62,7 +62,8 @@ app.post("/api/contact-us", async (req, res) => {
 
   var mailOptions = {
     from: req.body.email,
-    to: "sitioweb@indecmexico.com",
+    // to: "sitioweb@indecmexico.com",
+    to: "sales@medrepexpress.com",
     subject: subject,
     html: htmlMail
   };
@@ -104,7 +105,8 @@ app.post("/api/req-samples", async (req, res) => {
 
   var mailOptions = {
     from: req.body.email,
-    to: "sitioweb@indecmexico.com",
+    // to: "sitioweb@indecmexico.com",
+    to: "sales@medrepexpress.com",
     subject: subject,
     html: htmlMail
   };
@@ -146,7 +148,8 @@ app.post("/api/req-product-info", async (req, res) => {
 
   var mailOptions = {
     from: req.body.email,
-    to: "sitioweb@indecmexico.com",
+    // to: "sitioweb@indecmexico.com",
+    to: "sales@medrepexpress.com",
     subject: subject,
     html: htmlMail
   };
@@ -216,7 +219,8 @@ app.post("/api/shopping-cart", async (req, res) => {
 
   var mailOptions = {
     from: req.body.email,
-    to: "sitioweb@indecmexico.com",
+    // to: "sitioweb@indecmexico.com",
+    to: "sales@medrepexpress.com",
     subject: subject,
     html: htmlMail
   };
