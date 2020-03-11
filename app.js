@@ -14,6 +14,23 @@ const transporter = nodemailer.createTransport({
 });
 
 /* ==================================================================================================
+======================================= SSL Configurations ==========================================
+===================================================================================================*/
+
+// const privateKey = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.key', 'utf8');
+// const certificate = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.signed.cert', 'utf8');
+// const ca = fs.readFileSync('/home/ssl_certificates/letsencrypt-intermediate.pem', 'utf8');
+// const credentials = {
+// key: privateKey,
+// cert: certificate,
+// ca: ca
+// };
+
+// const server = https.createServer(credentials, app);
+
+
+
+/* ==================================================================================================
 =========================================== Middleware ==============================================
 ===================================================================================================*/
 
@@ -168,49 +185,48 @@ app.post("/api/req-product-info", async (req, res) => {
 // --------------------------------------- SHOPPING CART --------------------------------------------
 app.post("/api/shopping-cart", async (req, res) => {
   var purchaseOrder = "";
-  var i = "1";
+  var total;
   for (var key in req.body.items) {
     if (req.body.items.hasOwnProperty(key)) {
       purchaseOrder +=
-        "Product " +
-        i +
-        " => Description: " +
-        req.body.items[key].description +
-        " | Code: " +
-        req.body.items[key].code +
-        " | Quantity of product: " +
-        req.body.items[key].cant +
+        req.body.items[key].code + "  |   "  +
+        req.body.items[key].description + "   |   "  +
+        req.body.items[key].cant + "  |   "  +
+        req.body.items[key].price + "   |  "  +
+        (req.body.items[key].cant * req.body.items[key].price) + "   |   " +
         "<p>";
-      i++;
+      total += (req.body.items[key].cant * req.body.items[key].price);
+      console.log(total);
     }
-  }
+  }  
+  purchaseOrder += "STANDAR GROUND SHIPPING = $9.90" + "<p>";
+  purchaseOrder += "<p>" + "<p>" + "TOTAL = $" + total;
 
   var htmlMail = `
-        <h3>----- PURCHASE ORDER -----</h3>
-        <h3>INFORMATION OF CLIENT: </h3>
-        <h4>
-            <p> Business/Company Name: ${req.body.businessName}
-            <p> Requestor's First Name: ${req.body.firstName}
-            <p> Requestor's Last Name: ${req.body.lastName}
-            <p> Phone Number: ${req.body.phone}
-            <p> Fax: ${req.body.fax}
-            <p> Email: ${req.body.email}
-            <p> Address: ${req.body.address}
-            <p> Alternative Address: ${req.body.altAddress}
-            <p> State/Province: ${req.body.state}
-            <p> ZIP Code: ${req.body.zipCode}
-            <p> Country: ${req.body.country}
-        </h4>
-        <h3>CREDIT CARD: </h3>
-        <h4>
-            <p> Credit Card Number: ${req.body.numberCard}
-            <p> Credit Card Name Holder: ${req.body.cardNameHolder}
-            <p> Expiration Date: ${req.body.numberExpDate}
-            <p> Security Code: ${req.body.secCode}
-        </h4>
-        <h3>PURCHASE ORDER: </h3>
-        <h4>
-            <p>${purchaseOrder}
+        <h1>----- PURCHASE ORDER -----</h1>
+        <h2>BILL TO: </h2>
+          <p> Business/Company Name: ${req.body.businessName}
+          <p> Address: ${req.body.address}
+          <p> City: ${req.body.city}
+          <p> State/Province: ${req.body.state}
+          <p> ZIP Code: ${req.body.zipCode}
+          <p> Phone Number: ${req.body.phone}
+          <p> Email: ${req.body.email}
+        <h2>PAYMENT (CREDIT CARD): </h2>
+          <p> Credit Card Name Holder: ${req.body.cardNameHolder}
+          <p> Credit Card Number: ${req.body.numberCard}
+          <p> Expiration Date: ${req.body.numberExpDate}
+        <h2>SHIP TO: </h2>
+          <p> Business/Company Name: ${req.body.businessName_ship}          
+          <p> Address: ${req.body.address_ship}
+          <p> City: ${req.body.city_ship}
+          <p> State/Province: ${req.body.state_ship}
+          <p> ZIP Code: ${req.body.zipCode_ship}
+          <p> Phone Number: ${req.body.phone_ship}
+          <p> Email: ${req.body.email_ship}
+        <h2>PURCHASE ORDER: </h2>
+        <h4>ITEM NUMBER | DESCRIPTION | QUANTITY | x UNIT PRICE | TOTAL </h4>
+          <p>${purchaseOrder}
         </h4>
     `;
 
