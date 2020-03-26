@@ -3,6 +3,8 @@ import nodemailer from "nodemailer";
 import cors from "cors";
 
 const app = express();
+const https = require('https');
+const fs = require('fs');
 
 const transporter = nodemailer.createTransport({
   host: "smtp.medrepexpress.com",
@@ -17,17 +19,14 @@ const transporter = nodemailer.createTransport({
 ======================================= SSL Configurations ==========================================
 ===================================================================================================*/
 
-// const privateKey = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.key', 'utf8');
-// const certificate = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.signed.cert', 'utf8');
-// const ca = fs.readFileSync('/home/ssl_certificates/letsencrypt-intermediate.pem', 'utf8');
-// const credentials = {
-// key: privateKey,
-// cert: certificate,
-// ca: ca
-// };
-
-// const server = https.createServer(credentials, app);
-
+const privateKey = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.key', 'utf8');
+const certificate = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.signed.cert', 'utf8');
+const ca = fs.readFileSync('/home/ssl_certificates/letsencrypt-intermediate.pem', 'utf8');
+const credentials = {
+key: privateKey,
+cert: certificate,
+ca: ca
+};
 
 
 /* ==================================================================================================
@@ -257,9 +256,12 @@ app.post("/api/shopping-cart", async (req, res) => {
 ===================================================================================================*/
 
 const port = process.env.port || 3001;
-app.listen(port, () => {
-  console.log("Listenig on port: " + port);
+https.createServer(credentials, app).listen(port, () => {
+  console.log("Listening on port: " + port);
 });
+/*app.listen(port, () => {
+  console.log("Listening on port: " + port);
+});*/
 
 /* EXECUTION COMMAND
 pm2 start npm -- run start --name "medrepexpress"
