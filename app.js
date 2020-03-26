@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 /* ==================================================================================================
-============================================== Routes ===============================================
+============================================= Routes ===============================================
  ==================================================================================================*/
 
 // ----------------------------------------- CONTACT US ---------------------------------------------
@@ -190,15 +190,16 @@ app.post("/api/shopping-cart", async (req, res) => {
     if (req.body.items.hasOwnProperty(key)) {
       var itemTotal = Math.round((req.body.items[key].cant * req.body.items[key].price) * 100) / 100;
       total += itemTotal;
-      purchaseOrder +=
-        req.body.items[key].code + "   |   "  +
-        req.body.items[key].description + "   |   "  +
-        req.body.items[key].cant + "   |   "  +
-        req.body.items[key].price + "   |   "  +
-        itemTotal+
+      purchaseOrder += "|_" + 
+        req.body.items[key].code + "__|__"  +
+        req.body.items[key].description + "__|__"  +
+        req.body.items[key].cant + "__|__"  +
+        req.body.items[key].price + "__|__"  +
+        itemTotal + "__|"
         "<p>";
     }
   }  
+  total += 9.9;
   purchaseOrder += "STANDAR GROUND SHIPPING = $9.90" + "<p>";
   purchaseOrder += "<p>" + "<p>" + "TOTAL = $" + total;
 
@@ -225,7 +226,7 @@ app.post("/api/shopping-cart", async (req, res) => {
           <p> Phone Number: ${req.body.phone_ship}
           <p> Email: ${req.body.email_ship}
         <h2>PURCHASE ORDER: </h2>
-          <p> ITEM | DESCRIPTION | QUANTITY | PRICE | TOTAL
+          <p> |_ITEM_|_DESCRIPTION_|_QUANTITY_|_PRICE_|_TOTAL_|
           <p>${purchaseOrder}
     `;
 
