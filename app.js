@@ -190,16 +190,16 @@ app.post("/api/shopping-cart", async (req, res) => {
     if (req.body.items.hasOwnProperty(key)) {
       var itemTotal = Math.round((req.body.items[key].cant * req.body.items[key].price) * 100) / 100;
       total += itemTotal;
-      purchaseOrder += "|_" + 
-        req.body.items[key].code + "__|__"  +
-        req.body.items[key].description + "__|__"  +
-        req.body.items[key].cant + "__|__"  +
-        req.body.items[key].price + "__|__"  +
-        itemTotal + "__|"
+      purchaseOrder +=
+        req.body.items[key].code + " | "  +
+        req.body.items[key].description + " | "  +
+        req.body.items[key].cant + " | "  +
+        req.body.items[key].price + " | "  +
+        itemTotal +
         "<p>";
     }
   }  
-  total += 9.9;
+  total = Math.round((total + 9.9) * 100) / 100;
   purchaseOrder += "STANDAR GROUND SHIPPING = $9.90" + "<p>";
   purchaseOrder += "<p>" + "<p>" + "TOTAL = $" + total;
 
