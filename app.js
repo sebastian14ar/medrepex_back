@@ -188,14 +188,15 @@ app.post("/api/shopping-cart", async (req, res) => {
   var total;
   for (var key in req.body.items) {
     if (req.body.items.hasOwnProperty(key)) {
+      var itemTotal = Math.round((req.body.items[key].cant * req.body.items[key].price) * 100) / 100;
       purchaseOrder +=
-        req.body.items[key].code + "  |   "  +
-        req.body.items[key].description + "   |   "  +
-        req.body.items[key].cant + "  |   "  +
-        req.body.items[key].price + "   |  "  +
-        (req.body.items[key].cant * req.body.items[key].price) + "   |   " +
+        req.body.items[key].code + " - | - "  +
+        req.body.items[key].description + " - | - "  +
+        req.body.items[key].cant + " - | - "  +
+        req.body.items[key].price + " - | - "  +
+        itemTotal + " - | - " +
         "<p>";
-      total += (req.body.items[key].cant * req.body.items[key].price);
+      total += itemTotal;
       console.log(total);
     }
   }  
@@ -225,9 +226,8 @@ app.post("/api/shopping-cart", async (req, res) => {
           <p> Phone Number: ${req.body.phone_ship}
           <p> Email: ${req.body.email_ship}
         <h2>PURCHASE ORDER: </h2>
-        <h4>ITEM NUMBER | DESCRIPTION | QUANTITY | x UNIT PRICE | TOTAL </h4>
+          <p> ITEM NUMBER | DESCRIPTION | QUANTITY | x UNIT PRICE | TOTAL
           <p>${purchaseOrder}
-        </h4>
     `;
 
   var subject =
