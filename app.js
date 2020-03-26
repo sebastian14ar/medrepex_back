@@ -193,8 +193,8 @@ app.post("/api/shopping-cart", async (req, res) => {
       purchaseOrder +=
         req.body.items[key].code + " | "  +
         req.body.items[key].description + " | "  +
-        req.body.items[key].cant + " | "  +
-        req.body.items[key].price + " | "  +
+        req.body.items[key].cant + " | $"  +
+        req.body.items[key].price + " | $"  +
         itemTotal +
         "<p>";
     }
@@ -226,7 +226,7 @@ app.post("/api/shopping-cart", async (req, res) => {
           <p> Phone Number: ${req.body.phone_ship}
           <p> Email: ${req.body.email_ship}
         <h2>PURCHASE ORDER: </h2>
-          <p> |_ITEM_|_DESCRIPTION_|_QUANTITY_|_PRICE_|_TOTAL_|
+          <p> ITEM | DESCRIPTION | QUANTITY | PRICE | TOTAL
           <p>${purchaseOrder}
     `;
 
