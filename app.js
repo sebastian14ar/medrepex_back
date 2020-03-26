@@ -185,19 +185,18 @@ app.post("/api/req-product-info", async (req, res) => {
 // --------------------------------------- SHOPPING CART --------------------------------------------
 app.post("/api/shopping-cart", async (req, res) => {
   var purchaseOrder = "";
-  var total;
+  var total = 0;
   for (var key in req.body.items) {
     if (req.body.items.hasOwnProperty(key)) {
       var itemTotal = Math.round((req.body.items[key].cant * req.body.items[key].price) * 100) / 100;
-      purchaseOrder +=
-        req.body.items[key].code + " - | - "  +
-        req.body.items[key].description + " - | - "  +
-        req.body.items[key].cant + " - | - "  +
-        req.body.items[key].price + " - | - "  +
-        itemTotal + " - | - " +
-        "<p>";
       total += itemTotal;
-      console.log(total);
+      purchaseOrder +=
+        req.body.items[key].code + "   |   "  +
+        req.body.items[key].description + "   |   "  +
+        req.body.items[key].cant + "   |   "  +
+        req.body.items[key].price + "   |   "  +
+        itemTotal+
+        "<p>";
     }
   }  
   purchaseOrder += "STANDAR GROUND SHIPPING = $9.90" + "<p>";
@@ -226,7 +225,7 @@ app.post("/api/shopping-cart", async (req, res) => {
           <p> Phone Number: ${req.body.phone_ship}
           <p> Email: ${req.body.email_ship}
         <h2>PURCHASE ORDER: </h2>
-          <p> ITEM NUMBER | DESCRIPTION | QUANTITY | x UNIT PRICE | TOTAL
+          <p> ITEM | DESCRIPTION | QUANTITY | PRICE | TOTAL
           <p>${purchaseOrder}
     `;
 
@@ -266,7 +265,7 @@ https.createServer(credentials, app).listen(port, () => {
 
 app.get('/', function (req, res) {
   res.writeHead(200);
-  res.end("hello world\n");
+  res.end("by VainillaDev\n");
 });
 
 /* EXECUTION COMMAND
