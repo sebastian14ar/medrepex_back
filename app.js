@@ -22,6 +22,7 @@ const transporter = nodemailer.createTransport({
 const privateKey = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.key', 'utf8');
 const certificate = fs.readFileSync('/home/ssl_certificates/medrepexpress.com.signed.cert', 'utf8');
 const ca = fs.readFileSync('/home/ssl_certificates/letsencrypt-intermediate.pem', 'utf8');
+
 const credentials = {
 key: privateKey,
 cert: certificate,
@@ -259,10 +260,15 @@ const port = process.env.port || 3001;
 https.createServer(credentials, app).listen(port, () => {
   console.log("Listening on port: " + port);
 });
-/*app.listen(port, () => {
-  console.log("Listening on port: " + port);
-});*/
+
+
+/* ============================================= TEST ============================================*/
+
+app.get('/', function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+});
 
 /* EXECUTION COMMAND
-pm2 start npm -- run start --name "medrepexpress"
+pm2 start npm --name MedRep-Back -- start
 */
