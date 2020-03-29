@@ -202,10 +202,45 @@ router.post("/shopping-cart", async (req, res) => {
       res.send(error);
     } else {
       console.log("Email sent");
-      res.send("Email sent");
-    }
-  });
+      res.send("Email sent. Thank you!");
+      
+      const htmlMailRes = `
+        <h1>----- Order Confirmed -----</h1>
+          <h2>Thanks ${req.body.businessName} </h2>
+            <h3>Your Order </h3>
+              <p> Thank you for placing your order with MedRepExpress. This email is to confirm your order has been placed successfully, and will be processed & shipped to you soon.
+              <p> ${purchaseOrder}
+          <h2>Shipping to: </h2>
+            <p> Business/Company Name: ${req.body.businessName_ship}          
+            <p> Address: ${req.body.address_ship}
+            <p> City: ${req.body.city_ship}
+            <p> State/Province: ${req.body.state_ship}
+            <p> ZIP Code: ${req.body.zipCode_ship}
+            <p> Phone Number: ${req.body.phone_ship}
+            <p> Email: ${req.body.email_ship}
+          <h3>Thank you for shopping at MedRepExpress!</h3>
+          <h3>Sales@MedRepExpress.com</h3>
+          <h3>Toll Free: 877-740-9133</h3>
+          <p> © MedRepExpress
+      `;
 
+      const subjectRes = "ORDER CONFIRMED | MedRep Express";
+
+      var mailOptionsRes = {
+        from: "sales@medrepexpress.com",
+        to: req.body.email,
+        subject: subjectRes,
+        html: htmlMailRes
+      };
+
+      transporter.sendMail(mailOptionsRes, function(error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent to client");
+        }
+      });
+  }
 });
 
 
