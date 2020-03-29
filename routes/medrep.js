@@ -200,10 +200,7 @@ router.post("/shopping-cart", async (req, res) => {
     if (error) {
       console.log(error);
       res.send(error);
-    } else {
-      console.log("Email sent");
-      res.send("Email sent. Thank you!");
-      
+    } else {      
       const htmlMailRes = `
         <h1>----- Order Confirmed -----</h1>
           <h2>Thanks ${req.body.businessName} </h2>
@@ -240,7 +237,11 @@ router.post("/shopping-cart", async (req, res) => {
           console.log("Email sent to client");
         }
       });
-  }
+      
+      console.log("Email sent");
+      res.send("Email sent. Thank you!");
+    }
+  });
 });
 
 
