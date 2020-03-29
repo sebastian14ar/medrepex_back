@@ -6,6 +6,7 @@ const https = require('https');
 const fs = require('fs');
 const medRep = require("./routes/medrep");
 const indec = require("./routes/indec");
+const moreval = require("./routes/moreval");
 
 /* ==================================================================================================
 ======================================= SSL Configurations ==========================================
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', medRep);
 app.use('/indec', indec);
+app.use('/moreval', moreval);
 
 // Configure headers and cors
 app.use((req, res, next) => {

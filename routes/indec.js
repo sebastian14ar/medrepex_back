@@ -1,22 +1,19 @@
-import express from "express";
-import nodemailer from "nodemailer";
+import express from 'express';
+import nodemailer from 'nodemailer';
 
 const router = express.Router();
 
 var transporter = nodemailer.createTransport({
-  host:'mail.indecmexico.com',
+  host: 'mail.indecmexico.com',
   port: 465,
   auth: {
-    user:'sitioweb@indecmexico.com',
+    user: 'sitioweb@indecmexico.com',
     pass: 'Z2^6mVdJKJY%'
   }
 });
 
 // -------------------------------------- CONTACT US INDEC ------------------------------------------
 router.post('/contact-us', async(req, res) => {
-
-  console.log(req.body);
-
   if(req.body.name == null)
     res.send('Ayudanos agregando tu nombre, queremos conocerte');
   else if(req.body.email == null)  
@@ -35,7 +32,7 @@ router.post('/contact-us', async(req, res) => {
       </h4>
       `;
     
-    var subject = 'Me gustaría distribuir con ustedes | ' +  req.body.name + ' | ' + req.body.city;
+    var subject = "Me gustaría distribuir con ustedes | " +  req.body.name + " | " + req.body.city;
 
     var mailOptions = {
       from: req.body.email,
@@ -46,12 +43,10 @@ router.post('/contact-us', async(req, res) => {
     };
 
     transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
+      if(error)
         res.send(error);
-      }
-      else {
+      else
         res.send('EL correo se envío con éxito');
-      }
     });
   }
 });
