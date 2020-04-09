@@ -32,8 +32,7 @@ router.post('/contact-us', async(req, res) => {
 
     var mailOptions = {
       from: req.body.email,
-      to: "sitioweb@indecmexico.com",
-      // to: 'ventas@moreval.net',
+      to: 'ventas@moreval.net, sitioweb@indecmexico.com',
       subject: subject,
       html: htmlMail
     };
