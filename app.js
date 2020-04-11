@@ -62,8 +62,7 @@ app.get('/', function (req, res) {
 ===================================================================================================*/
 
 const port = process.env.port || 3001;
+// app.listen(port, () => {
 https.createServer(credentials, app).listen(port, () => {
   console.log("Listening on port: " + port);
-// app.listen(port, () => {
-//   console.log("Listenig on port: " + port);
 });

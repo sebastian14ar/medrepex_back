@@ -188,7 +188,7 @@ router.post("/shopping-cart", async (req, res) => {
   };     
 
   /** MAIL FOR MedRep */
-  if(sendEmail("sales@medrepexpress.com", req.body.email, subject, replacements)){
+  if(sendEmail("sales@medrepexpress.com", req.body.email, subject, replacements, templatePurchaseOrder)){
   // if(sendEmail("sitioweb@indecmexico.com", req.body.email, subject, replacements, templatePurchaseOrder)){
     /** CONFIRMATION MAIL FOR CLIENT */  
     const subjectRes = "ORDER CONFIRMED | MedRep Express";
