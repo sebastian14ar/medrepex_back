@@ -1,5 +1,8 @@
 import express from "express";
 import nodemailer from "nodemailer";
+import handlebars from 'handlebars';
+import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -14,9 +17,8 @@ const transporter = nodemailer.createTransport({
 
 // ----------------------------------------- CONTACT US ---------------------------------------------
 router.post("/contact-us", async (req, res) => {
-
   const htmlMail = `
-        <h3>----- CONTACT US -----</h3>
+        <h1> CONTACT US </h1>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
             <p> Name: ${req.body.name}
@@ -55,9 +57,8 @@ router.post("/contact-us", async (req, res) => {
 
 // -------------------------------------- REQUEST SAMPLES -------------------------------------------
 router.post("/req-samples", async (req, res) => {
-
   const htmlMail = `
-        <h3>----- REQUEST SAMPLES -----</h3>
+        <h1> REQUEST SAMPLES </h1>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
             <p> Business Name: ${req.body.businessName}
@@ -97,9 +98,8 @@ router.post("/req-samples", async (req, res) => {
 
 // ------------------------------------ REQUEST PRODUCT INFO ----------------------------------------
 router.post("/req-product-info", async (req, res) => {
-
   const htmlMail = `
-        <h3>----- REQUEST PRODUCT INFO -----</h3>
+        <h1> REQUEST PRODUCT INFO </h1>
         <h3>INFORMATION OF CLIENT: </h3>
         <h4>
             <p> Business Name: ${req.body.businessName}
@@ -139,110 +139,97 @@ router.post("/req-product-info", async (req, res) => {
 
 // --------------------------------------- SHOPPING CART --------------------------------------------
 router.post("/shopping-cart", async (req, res) => {
-
-  var purchaseOrder = "";
+  var templateOrderConfirmed = '../templates/medRep/orderConfirmed.hbs';
+  var templatePurchaseOrder = '../templates/medRep/purchaseOrder.hbs';
+  var subtotal = 0;
   var total = 0;
+  var items = [];
   for (var key in req.body.items) {
     if (req.body.items.hasOwnProperty(key)) {
       var itemTotal = Math.round((req.body.items[key].cant * req.body.items[key].price) * 100) / 100;
-      total += itemTotal;
-      purchaseOrder +=
-        req.body.items[key].code + " | "  +
-        req.body.items[key].description + " | "  +
-        req.body.items[key].cant + " | $"  +
-        req.body.items[key].price + " | $"  +
-        itemTotal +
-        "<p>";
+      subtotal += itemTotal;
+      items.push({
+        code: req.body.items[key].code,
+        description: req.body.items[key].description,
+        quantityt: req.body.items[key].cant,
+        price: req.body.items[key].price,
+        total: itemTotal
+      });
     }
-  }  
-  total = Math.round((total + 9.9) * 100) / 100;
-  purchaseOrder += "STANDAR GROUND SHIPPING = $9.90" + "<p>";
-  purchaseOrder += "<p>" + "<p>" + "TOTAL = $" + total;
-
-  const htmlMail = `
-        <h1>----- PURCHASE ORDER -----</h1>
-        <h2>BILL TO: </h2>
-          <p> Business/Company Name: ${req.body.businessName}
-          <p> Address: ${req.body.address}
-          <p> City: ${req.body.city}
-          <p> State/Province: ${req.body.state}
-          <p> ZIP Code: ${req.body.zipCode}
-          <p> Phone Number: ${req.body.phone}
-          <p> Email: ${req.body.email}
-        <h2>PAYMENT (CREDIT CARD): </h2>
-          <p> Credit Card Name Holder: ${req.body.cardNameHolder}
-          <p> Credit Card Number: ${req.body.numberCard}
-          <p> Expiration Date: ${req.body.numberExpDate}
-        <h2>SHIP TO: </h2>
-          <p> Business/Company Name: ${req.body.businessName_ship}          
-          <p> Address: ${req.body.address_ship}
-          <p> City: ${req.body.city_ship}
-          <p> State/Province: ${req.body.state_ship}
-          <p> ZIP Code: ${req.body.zipCode_ship}
-          <p> Phone Number: ${req.body.phone_ship}
-          <p> Email: ${req.body.email_ship}
-        <h2>PURCHASE ORDER: </h2>
-          <p> ITEM | DESCRIPTION | QUANTITY | PRICE | TOTAL
-          <p>${purchaseOrder}
-    `;
+  } 
+  subtotal = Math.round((subtotal) * 100) / 100; 
+  total = Math.round((subtotal + 9.9) * 100) / 100;
 
   const subject = "PURCHASE ORDER | " + req.body.businessName + " | " + req.body.city;
 
-  var mailOptions = {
-    from: req.body.email,
-    // to: "sitioweb@indecmexico.com",
-    to: "sales@medrepexpress.com",
-    subject: subject,
-    html: htmlMail
-  };
-  
-  transporter.sendMail(mailOptions, function(error, info) {
-    if (error) {
-      console.log(error);
-      res.send(error);
-    } else {      
-        const htmlMailRes = `
-          <h1>----- Order Confirmed -----</h1>
-            <h2>Thanks ${req.body.businessName} </h2>
-              <h3>Your Order </h3>
-                <p> Thank you for placing your order with MedRepExpress. This email is to confirm your order has been placed successfully, and will be processed & shipped to you soon.
-                <p> ${purchaseOrder}
-            <h2>Shipping to: </h2>
-              <p> Business/Company Name: ${req.body.businessName_ship}          
-              <p> Address: ${req.body.address_ship}
-              <p> City: ${req.body.city_ship}
-              <p> State/Province: ${req.body.state_ship}
-              <p> ZIP Code: ${req.body.zipCode_ship}
-              <p> Phone Number: ${req.body.phone_ship}
-              <p> Email: ${req.body.email_ship}
-            <h3>Thank you for shopping at MedRepExpress!</h3>
-            <h3>Sales@MedRepExpress.com</h3>
-            <h3>Toll Free: 877-740-9133</h3>
-            <p> © MedRepExpress
-        `;
+  let ts = Date.now();
+  let date_ob = new Date(ts);
+  let day = date_ob.getDate();
+  let month = date_ob.getMonth() + 1;
+  let year = date_ob.getFullYear();
+  let date = (month + "/" + day + "/" + year); 
 
-        const subjectRes = "ORDER CONFIRMED | MedRep Express";
+  const replacements = {
+    name: req.body.businessName,
+    date: date,
+    items: items,
+    subtotal: subtotal,
+    total: total,
+    shipping_address_name: req.body.businessName_ship,
+    shipping_address_street: req.body.address_ship,
+    shipping_address_city: req.body.city_ship,
+    shipping_address_province: req.body.state_ship,
+    shipping_address_zip: req.body.zipCode_ship,
+    billing_address_name: req.body.businessName,
+    billing_address_street: req.body.address,
+    billing_address_city: req.body.city,
+    billing_address_province: req.body.state,
+    billing_address_zip: req.body.zipCode   
+  };     
 
-        var mailOptionsRes = {
-          from: "sales@medrepexpress.com",
-          to: req.body.email,
-          subject: subjectRes,
-          html: htmlMailRes
-        };
-
-        transporter.sendMail(mailOptionsRes, function(error, info) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Email sent to client");
-          }
-        });
-      
+  /** MAIL FOR MedRep */
+  if(sendEmail("sales@medrepexpress.com", req.body.email, subject, replacements)){
+  // if(sendEmail("sitioweb@indecmexico.com", req.body.email, subject, replacements, templatePurchaseOrder)){
+    /** CONFIRMATION MAIL FOR CLIENT */  
+    const subjectRes = "ORDER CONFIRMED | MedRep Express";
+    if(sendEmail(req.body.email, "sales@medrepexpress.com", subjectRes, replacements, templateOrderConfirmed)){
       console.log("Email sent");
       res.send("Email sent. Thank you! Your purchase is in process.");
     }
-  });
+  }
 });
 
+
+// ============================ Send Mail with Template Implementation ==============================
+
+async function sendEmail(emailTo, emailFrom, subject, replacements, templateHBS) {
+  const filePath = path.join(__dirname, templateHBS);
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+
+  const htmlToSend = template(replacements);
+  
+  var mailOptions = {
+    from: emailFrom,
+    to: emailTo,
+    subject: subject,
+    html: htmlToSend
+  };  
+
+  const info = await transporter.sendMail(mailOptions, () => {
+    if (error) {
+      console.log(error);
+      return true;
+    } else {
+      console.log("Email sent: %s", info.messageId);
+      return false;
+    }
+  });
+
+  /* REFERENCES
+  https://stackoverflow.com/questions/39489229/pass-variable-to-html-template-in-nodemailer
+  */
+
+}
 
 module.exports = router;

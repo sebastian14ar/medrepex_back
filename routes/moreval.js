@@ -4,11 +4,11 @@ import nodemailer from 'nodemailer';
 const router = express.Router();
 
 const transporter = nodemailer.createTransport({
-  host: 'mail.indecmexico.com',
-  port: 465,
+  host: "smtp.medrepexpress.com",
+  port: 587,
   auth: {
-    user: 'sitioweb@indecmexico.com',
-    pass: 'Z2^6mVdJKJY%'
+    user: "sales@medrepexpress.com",
+    pass: "mxCY55Fc"
   }
 });
 
@@ -32,7 +32,7 @@ router.post('/contact-us', async(req, res) => {
 
     var mailOptions = {
       from: req.body.email,
-      to: 'ventas@moreval.net, sitioweb@indecmexico.com',
+      to: 'ventas@moreval.net',
       subject: subject,
       html: htmlMail
     };

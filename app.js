@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
+import https from 'https';
+import fs from 'fs';
 
 const app = express();
-const https = require('https');
-const fs = require('fs');
+
 const medRep = require("./routes/medrep");
 const indec = require("./routes/indec");
 const moreval = require("./routes/moreval");
@@ -29,6 +30,7 @@ ca: ca
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use('/api', medRep);
 app.use('/indec', indec);
 app.use('/moreval', moreval);
@@ -54,6 +56,7 @@ app.get('/', function (req, res) {
   res.end("by VainillaDev\n");
 });
 
+
 /* ==================================================================================================
 ======================================= Server connection ===========================================
 ===================================================================================================*/
@@ -64,7 +67,3 @@ https.createServer(credentials, app).listen(port, () => {
 // app.listen(port, () => {
 //   console.log("Listenig on port: " + port);
 });
-
-/* EXECUTION COMMAND
-pm2 start npm --name MedRep-Back -- start
-*/
