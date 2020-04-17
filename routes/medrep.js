@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import handlebars from 'handlebars';
 import path from 'path';
 import fs from 'fs';
+import { get } from "http";
 
 const router = express.Router();
 
@@ -139,10 +140,9 @@ router.post("/req-product-info", async (req, res) => {
 
 // --------------------------------------- SHOPPING CART --------------------------------------------
 router.post("/shopping-cart", async (req, res) => {
-  var templateOrderConfirmed = '../templates/medRep/orderConfirmed.hbs';
-  var templatePurchaseOrder = '../templates/medRep/purchaseOrder.hbs';
   var subtotal = 0;
   var total = 0;
+  var payment;
   var items = [];
   for (var key in req.body.items) {
     if (req.body.items.hasOwnProperty(key)) {
@@ -157,17 +157,46 @@ router.post("/shopping-cart", async (req, res) => {
       });
     }
   } 
+
   subtotal = Math.round((subtotal) * 100) / 100; 
   total = Math.round((subtotal + 9.9) * 100) / 100;
 
-  const subject = "PURCHASE ORDER | " + req.body.businessName + " | " + req.body.city;
+  var shipping_address = {
+    name: req.body.businessName_ship,
+    street: req.body.address_ship,
+    city: req.body.city_ship,
+    province: req.body.state_ship,
+    zip: req.body.zipCode_ship,
+  }
 
-  let ts = Date.now();
-  let date_ob = new Date(ts);
-  let day = date_ob.getDate();
-  let month = date_ob.getMonth() + 1;
-  let year = date_ob.getFullYear();
-  let date = (month + "/" + day + "/" + year); 
+  var billing_address = {
+    name: req.body.businessName,
+    street: req.body.address,
+    city: req.body.city,
+    province: req.body.state,
+    zip: req.body.zipCode   
+  }
+
+  if(req.body.purchase_order === ''){
+    payment = {
+      purchase_order: "Doesn't apply",
+      numberCard: req.body.numberCard,
+      cardNameHolder: req.body.cardNameHolder,
+      numberExpDate: req.body.numberExpDate,
+    }
+  } else{
+    payment = {
+      purchase_order: req.body.purchase_order,
+      numberCard: "Doesn't apply",
+      cardNameHolder: "Doesn't apply",
+      numberExpDate: "Doesn't apply",
+    }
+  }
+
+  const subject = "PURCHASE ORDER | " + req.body.businessName + " | " + req.body.city;
+  var templatePurchaseOrder = '../templates/medRep/purchaseOrder.hbs';
+  /* GET DATE NOW IN  FORMAT MM/dd/yy  */
+  var date = getDateMMDDYYYY();
 
   const replacements = {
     name: req.body.businessName,
@@ -175,23 +204,17 @@ router.post("/shopping-cart", async (req, res) => {
     items: items,
     subtotal: subtotal,
     total: total,
-    shipping_address_name: req.body.businessName_ship,
-    shipping_address_street: req.body.address_ship,
-    shipping_address_city: req.body.city_ship,
-    shipping_address_province: req.body.state_ship,
-    shipping_address_zip: req.body.zipCode_ship,
-    billing_address_name: req.body.businessName,
-    billing_address_street: req.body.address,
-    billing_address_city: req.body.city,
-    billing_address_province: req.body.state,
-    billing_address_zip: req.body.zipCode   
+    shipping_address: shipping_address,
+    billing_address: billing_address,
+    payment: payment    
   };     
-
+  
   /** MAIL FOR MedRep */
   if(sendEmail("sales@medrepexpress.com", req.body.email, subject, replacements, templatePurchaseOrder)){
   // if(sendEmail("sitioweb@indecmexico.com", req.body.email, subject, replacements, templatePurchaseOrder)){
     /** CONFIRMATION MAIL FOR CLIENT */  
     const subjectRes = "ORDER CONFIRMED | MedRep Express";
+    var templateOrderConfirmed = '../templates/medRep/orderConfirmed.hbs';
     if(sendEmail(req.body.email, "sales@medrepexpress.com", subjectRes, replacements, templateOrderConfirmed)){
       console.log("Email sent");
       res.send("Email sent. Thank you! Your purchase is in process.");
@@ -200,8 +223,15 @@ router.post("/shopping-cart", async (req, res) => {
 });
 
 
-// ============================ Send Mail with Template Implementation ==============================
-
+/**
+ * Send Mail with Template .hbs Implementation
+ * 
+ * @param {*} emailTo 
+ * @param {*} emailFrom 
+ * @param {*} subject 
+ * @param {*} replacements 
+ * @param {*} templateHBS 
+ */
 async function sendEmail(emailTo, emailFrom, subject, replacements, templateHBS) {
   const filePath = path.join(__dirname, templateHBS);
   const source = fs.readFileSync(filePath, 'utf-8').toString();
@@ -219,10 +249,10 @@ async function sendEmail(emailTo, emailFrom, subject, replacements, templateHBS)
   const info = await transporter.sendMail(mailOptions, () => {
     if (error) {
       console.log(error);
-      return true;
+      return false;
     } else {
       console.log("Email sent: %s", info.messageId);
-      return false;
+      return true;
     }
   });
 
@@ -231,5 +261,18 @@ async function sendEmail(emailTo, emailFrom, subject, replacements, templateHBS)
   */
 
 }
+
+/**
+ * Return the date in format MM/DD/YYYY
+ */
+function getDateMMDDYYYY() {
+  let date = new Date();
+  let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+  let month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+  let year = date.getFullYear();
+
+  return (month + "/" + day + "/" + year); 
+}
+
 
 module.exports = router;

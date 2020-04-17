@@ -255,9 +255,10 @@
 			<table>
 				<tr>
 					<td>
-						<br/>
-						<h3>Thanks {{ name }}</h3>
-												
+						<br/>						
+							<div align="center">
+								<h3>Thanks {{ name }}</h3>
+							</div>				
 						<br/>
 						
 						<h4>Your Order of {{ date }}</h4>
@@ -268,11 +269,11 @@
 						<!-- Line Items -->
 						<table style="width: 100%" class="items-table">
 							<tr>
-								<th>ITEM</th>
-								<th>DESCRIPTION</th>
-								<th>QUANTITY</th>
-								<th>PRICE</th>
-								<th>TOTAL</th>
+								<th>ITEM </th>
+								<th>DESCRIPTION </th>
+								<th>QUANTITY </th>
+								<th>PRICE </th>
+								<th>TOTAL </th>
 							</tr>
 							{{#each items}}
 								<tr>
@@ -302,11 +303,11 @@
 						</table>
 						
 						<br/>
-						<br/>
 						
 						<h4><b>Total: {{ total }}</b></h4>
 						<!-- /Totals -->
 						
+						<br/>
 						<br/>
 
 						<!-- address detals -->
@@ -319,11 +320,11 @@
 												<td>				
 													<h5 class="">Shipping address</h5>
 													<p class="">
-														- {{ shipping_address_name }}<br/>
-														- {{ shipping_address_street }}<br/>
-														- {{ shipping_address_city }}
-														- {{ shipping_address_province }}<br/>
-														- {{ shipping_address_zip }}</p>
+														- {{ shipping_address.name }}<br/>
+														- {{ shipping_address.street }}<br/>
+														- {{ shipping_address.city }}
+														{{ shipping_address.province }}<br/>
+														- {{ shipping_address.zip }}</p>
 													</p>
 												</td>
 											</tr>
@@ -335,11 +336,11 @@
 												<td>											
 													<h5 class="">Billing address</h5>								
 													<p class="">
-														- {{ billing_address_name }}<br/>
-														- {{ billing_address_street }}<br/>
-														- {{ billing_address_city }}
-														- {{ billing_address_province }}<br/>
-														- {{ billing_address_zip }}</p>
+														- {{ billing_address.name }}<br/>
+														- {{ billing_address.street }}<br/>
+														- {{ billing_address.city }}
+														{{ billing_address.province }}<br/>
+														- {{ billing_address.zip }}</p>
 	                				</p>
 												</td>
 											</tr>
