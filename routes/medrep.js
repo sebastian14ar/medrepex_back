@@ -163,6 +163,7 @@ router.post("/shopping-cart", async (req, res) => {
 
   var shipping_address = {
     name: req.body.businessName_ship,
+    phone: req.body.phone_ship,
     street: req.body.address_ship,
     city: req.body.city_ship,
     province: req.body.state_ship,
@@ -171,6 +172,7 @@ router.post("/shopping-cart", async (req, res) => {
 
   var billing_address = {
     name: req.body.businessName,
+    phone: req.body.phone,
     street: req.body.address,
     city: req.body.city,
     province: req.body.state,
