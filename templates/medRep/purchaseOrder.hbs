@@ -16,14 +16,11 @@
 
 	* { font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
 	
-	img { 
-		max-width: 100%; 
-	}
-
 	.collapse {
 		margin:0;
 		padding:0;
 	}
+
 	body {
 		-webkit-font-smoothing:antialiased; 
 		-webkit-text-size-adjust:none; 
@@ -34,7 +31,7 @@
 .column table { width:100%;}
 	.column {
 		width: 300px;
-		float:left;
+		float: center;
 	}
 
 	.column tr td { padding: 15px; }
@@ -47,7 +44,7 @@
 	.columns .column {
 		width: 280px;
 		min-width: 279px;
-		float:left;
+		float: center;
 	}
 
 	table.columns, table.column, .columns .column tr, .columns .column td {
@@ -57,6 +54,10 @@
 		border-collapse:collapse;
 	}
 	
+	.textToRight{
+		text-align: right;
+	}
+
 	/* ------------------------------------- 
 			HEADER 
 	------------------------------------- */
@@ -83,25 +84,25 @@
 	}
 	
 	h1 small, h2 small, h3 small, h4 small, h5 small, h6 small { font-size: 60%; color: #6f6f6f; line-height: 0; text-transform: none; }
-	
-	h1 { font-weight:200; font-size: 44px;}
 
-	h2 { font-weight:200; font-size: 37px;}
+	h1 { font-weight:800; font-size: 28px; text-transform: uppercase; color:#444;}
 
-	h3 { font-weight:500; font-size: 27px;}
+	h2 { font-weight:400; font-size: 24px;}
 
-	h4 { font-weight:500; font-size: 23px;}
+	h3 { font-weight:450; font-size: 22px;}
 
-	h5 { font-weight:900; font-size: 17px;}
+	h4 { font-weight:450; font-size: 20px;}
 
-	h6 { font-weight:900; font-size: 14px; text-transform: uppercase; color:#444;}
-	
+	h5 { font-weight:400; font-size: 17px;}
+
+	h6 { font-weight:200; font-size: 15px;}
+
 	.collapse { margin:0!important;}
 	
 	p, ul { 
 		margin-bottom: 10px; 
 		font-weight: normal; 
-		font-size:14px; 
+		font-size: 16px; 
 		line-height:1.6;
 	}
 	
@@ -175,7 +176,7 @@
 					<table width="613.6" height="32.4" bgcolor="#FFFFFF">
 						<tr>
 							<td align="center">
-								<h6 class="collapse">Purchase Order</h6>	
+								<h1 class="collapse">Purchase Order</h1>	
 							</td>
 						</tr>
 					</table>
@@ -199,56 +200,46 @@
 					<td>
 						<br/>
 						
-						<h4>Order of {{ name }} of the {{ date }}</h4>
+						<h3>Order of {{ name }} of the {{ date }}</h3>
 					
 						<br/>
 
 						<!-- Line Items -->
 						<table style="width: 100%" class="items-table">
 							<tr>
-								<th>ITEM </th>
-								<th>DESCRIPTION </th>
-								<th>QUANTITY </th>
-								<th>PRICE </th>
-								<th>TOTAL </th>
+								<th><h5> ITEM </h5></th>
+								<th><h5> DESCRIPTION </h5></th>
+								<th><h5> QUANTITY </h5></th>
+								<th><h5> PRICE </h5></th>
+								<th><h5> TOTAL </h5></th>
 							</tr>
 							{{#each items}}
 								<tr>
-									<td>{{this.code}}</td>
-									<td>{{this.description}}</td>
-									<td>{{this.quantityt}}</td>
-									<td>{{this.price}}</td>
-									<td>{{this.total}} </td>
+									<th><h6>{{this.code}}</h6></th>
+									<th><h6>{{this.description}}</h6></th>
+									<th><h6>{{this.quantityt}}</h6></th>
+									<th><h6>${{this.price}}</h6></th>
+									<th><h6>${{this.total}}</h6></th>
 								</tr>
 							{{/each}}
 						</table>
 						<!-- /Line Items -->
 						
 						<br/>
-						<br/>
 						
 						<!-- Totals -->
-						<h5><b>Subtotal:</b> {{ subtotal }}</h5>
-						
-						<table class="columns" width="100%">
-							<tr>
-								<td>
-									<p><b>Standar ground shipping: $9.90</p>			
-									<span class="clear"></span>
-								</td>
-							</tr>
-						</table>
-						
-						<br/>
-						
-						<h4><b>Total: {{ total }}</b></h4>
+						<div class="textToRight">
+							<h4><b>Subtotal:</b> ${{ subtotal }}</h4>
+							<h4><b>Standar ground shipping:</b> $9.90</h4><br/>			
+							<h3><b>Total:</b> ${{ total }}</h3>						
+						</div>					
 						<!-- /Totals -->
 						
 						<br/>
 						<br/>
 
 						<!-- Payment -->
-						<h4><b>Payment: </b></h4>						
+						<h3><b>Payment: </b></h3>						
 						<p class="">
 							<b>- Purchase Order: </b>{{ payment.purchase_order }}<br/>
 							<b>Credit Card Information</b><br/>
@@ -269,7 +260,7 @@
 										<table align="left" class="column">
 											<tr>
 												<td>				
-													<h5 class="">Shipping address</h5>
+													<h4 class=""><b>Shipping address</b></h4>
 													<p class="">
 														- {{ shipping_address.name }}<br/>
 														- {{ shipping_address.phone }}<br/>
@@ -286,7 +277,7 @@
 										<table align="left" class="column">
 											<tr>
 												<td>											
-													<h5 class="">Billing address</h5>								
+													<h4 class=""><b>Billing address</b></h4>								
 													<p class="">
 														- {{ billing_address.name }}<br/>
 														- {{ billing_address.phone }}<br/>

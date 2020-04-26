@@ -211,14 +211,15 @@ router.post("/shopping-cart", async (req, res) => {
     payment: payment    
   };     
   
-  /** MAIL FOR MedRep */
+  /* MAIL FOR MedRep */
   if(sendEmail("sales@medrepexpress.com", req.body.email, subject, replacements, templatePurchaseOrder)){
-  // if(sendEmail("sitioweb@indecmexico.com", req.body.email, subject, replacements, templatePurchaseOrder)){
-    /** CONFIRMATION MAIL FOR CLIENT */  
+  // if(sendEmail("sitioweb@indecmexico.com", req.body.email, subject, replacements, templatePurchaseOrder)){ 
+    console.log("Email 'PURCHASE ORDER' sent");
+    /** CONFIRMATION MAIL FOR CLIENT */ 
     const subjectRes = "ORDER CONFIRMED | MedRep Express";
     var templateOrderConfirmed = '../templates/medRep/orderConfirmed.hbs';
     if(sendEmail(req.body.email, "sales@medrepexpress.com", subjectRes, replacements, templateOrderConfirmed)){
-      console.log("Email sent");
+      console.log("Email 'ORDER CONFIRMED' sent");
       res.send("Email sent. Thank you! Your purchase is in process.");
     }
   }
