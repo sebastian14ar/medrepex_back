@@ -32,7 +32,7 @@ router.post('/contact-us', async(req, res) => {
       </h4>
       `;
     
-    var subject = "Me gustaría distribuir con ustedes | " +  req.body.name + " | " + req.body.city;
+    var subject = "Deseo información | " +  req.body.name + " | " + req.body.city;
 
     var mailOptions = {
       from: req.body.email,
