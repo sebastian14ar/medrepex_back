@@ -1,0 +1,25 @@
+{
+  "name": "medrepexpress_backend",
+  "version": "1.0.0",
+  "description": "API. Send a email",
+  "main": "app.js",
+  "scripts": {
+    "start": "babel-node app.js --exec",
+    "devbabel": "nodemon app.js --exec babel-node"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "handlebars": "^4.7.6",
+    "nodemailer": "^6.4.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.8.7"
+  },
+  "author": "Miguel Angel Valdés",
+  "license": "ISC"
+}
