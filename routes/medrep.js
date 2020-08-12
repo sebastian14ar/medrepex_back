@@ -8,11 +8,11 @@ import { get } from "http";
 const router = express.Router();
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.medrepexpress.com",
-  port: 587,
+  host: "webhosting2016.is.cc",
+  port: 465,
   auth: {
     user: "sales@medrepexpress.com",
-    pass: "mxCY55Fc"
+    pass: "Tomsguitar3!"
   }
 });
 
