@@ -8,7 +8,7 @@ import { get } from "http";
 const router = express.Router();
 
 const transporter = nodemailer.createTransport({
-  host: "webhosting2016.is.cc",
+  host: "mail.medrepexpress.com",
   port: 465,
   auth: {
     user: "sales@medrepexpress.com",
